@@ -4,6 +4,16 @@ public class GameResult {
     Player victorious;
     Boolean isGameOver;
     Boolean isDraw;
+    Boolean hasFork;
+    int numberOfMoves;
+
+    public GameResult(Player victorious, Boolean isGameOver, Boolean isDraw, Boolean hasFork, int numberOfMoves) {
+        this.victorious = victorious;
+        this.isGameOver = isGameOver;
+        this.isDraw = isDraw;
+        this.hasFork = hasFork;
+        this.numberOfMoves = numberOfMoves;
+    }
 
     public GameResult() {
         this.isGameOver= false;

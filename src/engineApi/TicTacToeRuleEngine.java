@@ -1,9 +1,6 @@
 package engineApi;
 
-import gamePlay.Board;
-import gamePlay.GameResult;
-import gamePlay.Move;
-import gamePlay.Player;
+import gamePlay.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,32 +15,28 @@ public class TicTacToeRuleEngine implements RuleEngine {
     }
 
     public GameResult fullTraversal(BiFunction<Integer, Integer, Character> getCellChar)  {
-        boolean streakComplete= false;
-        GameResult gameResult= new GameResult();
+        GameResultBuilder gameResult= new GameResultBuilder();
         //row/col
         for(int i=0; i<3; ++i) {
             int finalI = i;
             Function<Integer, Character> traversal= j ->getCellChar.apply(finalI, j);
-            gameResult= innerTraversal(traversal);
-            if(gameResult.getGameOver()) {
-                gameResult.setGameOver(true);
-                return gameResult;
+            if(innerTraversal(traversal).getGameOver()) {
+                return gameResult.isGameOver(true).isDraw(false).build();
             }
         }
-        return gameResult;
+        return gameResult.build();
     }
     public GameResult innerTraversal(Function<Integer, Character> traversal) {
-        GameResult gameResult= new GameResult();
+        GameResultBuilder gameResult= new GameResultBuilder();
         for(int j=0; j<3; ++j) {
             if(traversal.apply(j)== '-' || traversal.apply(0)!= traversal.apply(j)){
-                return gameResult;
+                return gameResult.build();
             }
         }
-        gameResult.setGameOver(true);
-        return gameResult;
+        return gameResult.isGameOver(true).build();
     }
     public GameResult checkDraw(Board board) {
-        GameResult gameResult= new GameResult();
+        GameResultBuilder gameResult= new GameResultBuilder();
         boolean hasEmptySpace= false;
         for(int i=0; i<3; ++i) {
             for(int j=0; j<3; ++j) {
@@ -51,11 +44,9 @@ public class TicTacToeRuleEngine implements RuleEngine {
             }
         }
         if(!hasEmptySpace) {
-            gameResult.setDraw(true);
-            gameResult.setGameOver(true);
-            return gameResult;
+            return gameResult.isDraw(true).isGameOver(true).build();
         }
-        return gameResult;
+        return gameResult.build();
     }
 
     @Override
