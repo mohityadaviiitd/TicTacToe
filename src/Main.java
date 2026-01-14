@@ -44,6 +44,7 @@ public class Main {
             Move move= new Move(row, col);
             gamePlay.makeMove(board, player, move);
             ruleEngine.updateGameResult(gameResult, board, player);
+            System.out.println(board.toString());
         }
         if(gameResult.getDraw()) {
             System.out.println("DRAW");

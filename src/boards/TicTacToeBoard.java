@@ -33,4 +33,15 @@ public class TicTacToeBoard implements Board {
     public void setCellValue(Player player, Move move) {
         ticTacToeBoard[move.getRow()][move.getCol()]= player.getSymbol();
     }
+    @Override
+    public String toString() {
+        StringBuilder sb= new StringBuilder();
+        for(int i=0; i<3; ++i) {
+            for(int j=0; j<3; ++j) {
+                sb.append(getCellValue(new Move(i, j)));
+            }
+            sb.append(System.lineSeparator());;
+        }
+        return sb.toString();
+    }
 }

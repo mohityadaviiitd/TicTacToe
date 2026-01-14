@@ -43,6 +43,7 @@ public class MainTest {
             ruleEngine.updateGameResult(gameResult, board, player);
             moveNo++;
         }
+        System.out.println(board.toString());
         return gameResult;
 
     }
@@ -52,6 +53,31 @@ public class MainTest {
         int[][] player2move= new int[][]{{1, 0}, {2, 1}, {1, 2}};
         GameResult gameResult= startTicTacToePlay(player1move, player2move);
         assertEquals('X', gameResult.getVictorious().getSymbol());
+
+    }
+    @Test
+    public void checkForRowWin() {
+        int[][] player1move= new int[][]{{1, 0}, {1, 1}, {1, 2}};
+        int[][] player2move= new int[][]{{0, 0}, {2, 1}, {0, 2}};
+        GameResult gameResult= startTicTacToePlay(player1move, player2move);
+        assertEquals('X', gameResult.getVictorious().getSymbol());
+
+    }
+    @Test
+    public void checkForColWin() {
+        int[][] player1move= new int[][]{{0, 2}, {1, 2}, {2, 2}};
+        int[][] player2move= new int[][]{{1, 0}, {2, 1}, {1, 1}};
+        GameResult gameResult= startTicTacToePlay(player1move, player2move);
+        assertEquals('X', gameResult.getVictorious().getSymbol());
+
+    }
+
+    @Test
+    public void checkForDiag2Win() {
+        int[][] player1move= new int[][]{{0, 1}, {2, 2}, {1, 0}};
+        int[][] player2move= new int[][]{{0, 2}, {1, 1}, {2, 0}};
+        GameResult gameResult= startTicTacToePlay(player1move, player2move);
+        assertEquals('0', gameResult.getVictorious().getSymbol());
 
     }
 

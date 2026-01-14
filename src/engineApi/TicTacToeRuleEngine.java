@@ -5,6 +5,9 @@ import gamePlay.GameResult;
 import gamePlay.Move;
 import gamePlay.Player;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 public class TicTacToeRuleEngine implements RuleEngine {
 
     @Override
@@ -12,74 +15,36 @@ public class TicTacToeRuleEngine implements RuleEngine {
         return (move.getRow()>=0 && move.getCol()>=0 && move.getRow()<3 && move.getCol()<3 && board.getCellValue(move)== '-');
     }
 
+    public boolean fullTraversal(BiFunction<Integer, Integer, Character> getCellChar)  {
+        boolean streakComplete= false;
+        //row/col
+        for(int i=0; i<3; ++i) {
+            int finalI = i;
+            Function<Integer, Character> traversal= j ->getCellChar.apply(finalI, j);
+            streakComplete= innerTraversal(traversal);
+            if(streakComplete) return streakComplete;
+        }
+        return streakComplete;
+    }
+    public boolean innerTraversal(Function<Integer, Character> traversal) {
+        for(int j=0; j<3; ++j) {
+            if(traversal.apply(j)== '-' || traversal.apply(0)!= traversal.apply(j)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void updateGameResult(GameResult gameResult, Board board, Player player) {
-        //row
-        boolean rowComplete= false;
-        for(int i=0; i<3; ++i) {
-            char firstChar= board.getCellValue(new Move(i, 0));
-            if(firstChar=='-') break;
-            for(int j=0; j<3; ++j) {
-                if(firstChar!= board.getCellValue(new Move(i, j))) {
-                    rowComplete= false;
-                    break;
-                }
-                rowComplete= true;
-            }
-        }
-        if(rowComplete) {
-            gameResult.setVictorious(player);
-            gameResult.setGameOver(true);
-            return;
-        }
-        //col
-        boolean colComplete= false;
-        for(int i=0; i<3; ++i) {
-            char firstChar= board.getCellValue(new Move(0, i));
-            if(firstChar=='-') break;
-            for(int j=0; j<3; ++j) {
-                if(firstChar!= board.getCellValue(new Move(j, i))) {
-                    colComplete= false;
-                    break;
-                }
-                colComplete= true;
-            }
-        }
-        if(colComplete) {
-            gameResult.setVictorious(player);
-            gameResult.setGameOver(true);
-            return;
-        }
-        //diag1
-        boolean diag1Complete= false;
-        char firstChar= board.getCellValue(new Move(0, 0));
-        if(firstChar!='-') {
-            for(int i=0, j=0; i<3 && j<3; ++i, ++j) {
-                if(firstChar!= board.getCellValue(new Move(i, j))) {
-                    diag1Complete= false;
-                    break;
-                }
-                diag1Complete= true;
-            }
-        }
-        if(diag1Complete) {
-            gameResult.setVictorious(player);
-            gameResult.setGameOver(true);
-            return;
-        }
-        //diag2
-        boolean diag2Complete= false;
-        firstChar= board.getCellValue(new Move(0, 0));
-        if(firstChar!='-') {
-            for(int i=0, j=0; i<3 && j<3; ++i, ++j) {
-                if(firstChar!= board.getCellValue(new Move(i, j))) {
-                    diag2Complete= false;
-                    break;
-                }
-                diag2Complete= true;
-            }
-        }
-        if(diag2Complete) {
+
+        BiFunction<Integer, Integer, Character> getRowChar= (i, j)->board.getCellValue(new Move(i, j));
+        BiFunction<Integer, Integer, Character> getColChar= (i, j)->board.getCellValue(new Move(j, i));
+        Function<Integer, Character> getDiag1Char= (j)-> board.getCellValue(new Move(j, j));
+        Function<Integer, Character> getDiag2Char= (j)-> board.getCellValue(new Move(j, 2-j));
+
+        boolean streakComplete= fullTraversal(getRowChar) || fullTraversal(getColChar) || innerTraversal(getDiag1Char) || innerTraversal(getDiag2Char);
+        if(streakComplete) {
             gameResult.setVictorious(player);
             gameResult.setGameOver(true);
             return;
