@@ -9,5 +9,5 @@ public interface RuleEngine {
 
     boolean isValid(Board board, Player player, Move move);
 
-    void updateGameResult(GameResult gameResult, Board board, Player player);
+    GameResult updateGameResult(Board board, Player player);
 }

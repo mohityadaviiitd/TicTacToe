@@ -43,7 +43,7 @@ public class Main {
             int col= sc.nextInt();
             Move move= new Move(row, col);
             gamePlay.makeMove(board, player, move);
-            ruleEngine.updateGameResult(gameResult, board, player);
+            gameResult= ruleEngine.updateGameResult(board, player);
             System.out.println(board.toString());
         }
         if(gameResult.getDraw()) {

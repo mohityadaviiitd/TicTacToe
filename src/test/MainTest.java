@@ -40,7 +40,7 @@ public class MainTest {
             playerMove= f2.apply(playerMove);
             Move move= new Move(playerMove[moveNo/2][0], playerMove[moveNo/2][1]);
             gamePlay.makeMove(board, player, move);
-            ruleEngine.updateGameResult(gameResult, board, player);
+            gameResult= ruleEngine.updateGameResult(board, player);
             moveNo++;
         }
         System.out.println(board.toString());
@@ -78,6 +78,14 @@ public class MainTest {
         int[][] player2move= new int[][]{{0, 2}, {1, 1}, {2, 0}};
         GameResult gameResult= startTicTacToePlay(player1move, player2move);
         assertEquals('0', gameResult.getVictorious().getSymbol());
+
+    }
+    @Test
+    public void checkForDraw() {
+        int[][] player1move= new int[][]{{0, 0}, {0, 2}, {1, 1}, {2, 1}, {1, 2}};
+        int[][] player2move= new int[][]{{0, 1}, {1, 0}, {2, 2}, {2, 0}};
+        GameResult gameResult= startTicTacToePlay(player1move, player2move);
+        assertEquals(true, gameResult.getDraw());
 
     }
 
