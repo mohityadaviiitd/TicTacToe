@@ -48,9 +48,19 @@ public class TicTacToeRuleEngine implements RuleEngine {
         }
         return gameResult.build();
     }
+    public GameResult timeoutCheck(GamePlay gamePlay, Player player) {
+        GameResultBuilder gameResult= new GameResultBuilder();
+        if(gamePlay.getGameConfig().isTimed()) {
+            if(player.getTimeLeft().getMilliseconds()<=0) {
+                return gameResult.isGameOver(true).winBy("timeout").build();
+            }
+        }
+        return gameResult.build();
+    }
 
     @Override
-    public GameResult updateGameResult(Board board, Player player) {
+    public GameResult updateGameResult(GamePlay gamePlay, Player player) {
+        Board board= gamePlay.getBoard();
         GameResult gameResult= new GameResult();
         
         BiFunction<Integer, Integer, Character> getRowCells= (i, j)->board.getCellValue(new Move(i, j));
@@ -58,19 +68,20 @@ public class TicTacToeRuleEngine implements RuleEngine {
         Function<Integer, Character> getDiagCells= (j)-> board.getCellValue(new Move(j, j));
         Function<Integer, Character> getRevDiagCells= (j)-> board.getCellValue(new Move(j, 2-j));
 
-        HashMap<String, ArrayList<Rule>> boardRules= new HashMap<>();
-        ArrayList<Rule> rules= new ArrayList<>();
 
-        rules.add(new Rule(board1-> fullTraversal(getRowCells)));
-        rules.add(new Rule(board1-> fullTraversal(getColCells)));
-        rules.add(new Rule(board1-> innerTraversal(getDiagCells)));
-        rules.add(new Rule(board1-> innerTraversal(getRevDiagCells)));
-        rules.add(new Rule(board1-> checkDraw(board)));
+        HashMap<String, ArrayList<Rule<Board, GameResult>>> boardRules= new HashMap<>();
+        ArrayList<Rule<Board, GameResult>> rules= new ArrayList<>();
+        rules.add(new Rule<>(board1-> timeoutCheck(gamePlay, player)));
+        rules.add(new Rule<>(board1-> fullTraversal(getRowCells)));
+        rules.add(new Rule<>(board1-> fullTraversal(getColCells)));
+        rules.add(new Rule<>(board1-> innerTraversal(getDiagCells)));
+        rules.add(new Rule<>(board1-> innerTraversal(getRevDiagCells)));
+        rules.add(new Rule<>(board1-> checkDraw(board)));
 
 
         boardRules.put(board.getClass().getName(), rules);
 
-        for(Rule rule: boardRules.get(board.getClass().getName())) {
+        for(Rule<Board, GameResult> rule: boardRules.get(board.getClass().getName())) {
             gameResult= rule.getCondition().apply(board);
             if(gameResult.getGameOver()) {
                 gameResult.setVictorious(player);

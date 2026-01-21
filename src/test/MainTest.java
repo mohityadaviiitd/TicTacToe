@@ -27,7 +27,7 @@ public class MainTest {
         Player player1= new Player('X');
         Player player2 = new Player('0');
         GameResult gameResult= new GameResult();
-        GamePlay gamePlay = new GamePlay();
+        GamePlay gamePlay = new GamePlay(board, new GameConfig());
         RuleEngine ruleEngine= new TicTacToeRuleEngine();
         Scanner sc= new Scanner(System.in);
         Function<Player, Player> f= x-> x==player1?player2:player1;
@@ -39,8 +39,8 @@ public class MainTest {
             player= f.apply(player);
             playerMove= f2.apply(playerMove);
             Move move= new Move(playerMove[moveNo/2][0], playerMove[moveNo/2][1]);
-            gamePlay.makeMove(board, player, move);
-            gameResult= ruleEngine.updateGameResult(board, player);
+            gamePlay.makeMove(player, move);
+            gameResult= ruleEngine.updateGameResult(gamePlay, player);
             moveNo++;
         }
         System.out.println(board.toString());

@@ -6,18 +6,43 @@ public class GameResult {
     Boolean isDraw;
     Boolean hasFork;
     int numberOfMoves;
+    String winBy="";
 
-    public GameResult(Player victorious, Boolean isGameOver, Boolean isDraw, Boolean hasFork, int numberOfMoves) {
+    public GameResult(Player victorious, Boolean isGameOver, Boolean isDraw, Boolean hasFork, int numberOfMoves, String winBy) {
         this.victorious = victorious;
         this.isGameOver = isGameOver;
         this.isDraw = isDraw;
         this.hasFork = hasFork;
         this.numberOfMoves = numberOfMoves;
+        this.winBy= winBy;
     }
 
     public GameResult() {
         this.isGameOver= false;
         this.isDraw= false;
+    }
+    public String getWinBy() {
+        return winBy;
+    }
+
+    public void setWinBy(String winBy) {
+        this.winBy = winBy;
+    }
+
+    public int getNumberOfMoves() {
+        return numberOfMoves;
+    }
+
+    public void setNumberOfMoves(int numberOfMoves) {
+        this.numberOfMoves = numberOfMoves;
+    }
+
+    public Boolean getHasFork() {
+        return hasFork;
+    }
+
+    public void setHasFork(Boolean hasFork) {
+        this.hasFork = hasFork;
     }
 
     public Player getVictorious() {

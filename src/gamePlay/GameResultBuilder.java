@@ -6,6 +6,7 @@ public class GameResultBuilder {
     Boolean isDraw= false;
     Boolean hasFork= false;
     int numberOfMoves;
+    String winBy= "";
 
     public GameResultBuilder victorious(Player victorious) {
         this.victorious= victorious;
@@ -27,7 +28,11 @@ public class GameResultBuilder {
         this.numberOfMoves= numberOfMoves;
         return this;
     }
+    public GameResultBuilder winBy(String winBy) {
+        this.winBy= winBy;
+        return this;
+    }
     public GameResult build() {
-        return new GameResult(victorious, isGameOver, isDraw, hasFork, numberOfMoves);
+        return new GameResult(victorious, isGameOver, isDraw, hasFork, numberOfMoves, winBy);
     }
 }
