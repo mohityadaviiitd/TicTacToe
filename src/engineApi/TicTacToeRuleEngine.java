@@ -1,5 +1,6 @@
 package engineApi;
 
+import boards.TicTacToeBoard;
 import gamePlay.*;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ public class TicTacToeRuleEngine implements RuleEngine {
 
     @Override
     public boolean isValid(Board board, Player player, Move move) {
-        return (move.getRow()>=0 && move.getCol()>=0 && move.getRow()<3 && move.getCol()<3 && board.getCellValue(move)== '-');
+        TicTacToeBoard board1= (TicTacToeBoard)board;
+        return (move.getRow()>=0 && move.getCol()>=0 && move.getRow()<3 && move.getCol()<3 && board1.getCellValue(move)== '-');
     }
 
     public GameResult fullTraversal(BiFunction<Integer, Integer, Character> getCellChar)  {
@@ -35,7 +37,7 @@ public class TicTacToeRuleEngine implements RuleEngine {
         }
         return gameResult.isGameOver(true).build();
     }
-    public GameResult checkDraw(Board board) {
+    public GameResult checkDraw(TicTacToeBoard board) {
         GameResultBuilder gameResult= new GameResultBuilder();
         boolean hasEmptySpace= false;
         for(int i=0; i<3; ++i) {
@@ -60,8 +62,10 @@ public class TicTacToeRuleEngine implements RuleEngine {
 
     @Override
     public GameResult updateGameResult(GamePlay gamePlay, Player player) {
-        Board board= gamePlay.getBoard();
+        TicTacToeBoard board= (TicTacToeBoard) gamePlay.getBoard();
         GameResult gameResult= new GameResult();
+
+
         
         BiFunction<Integer, Integer, Character> getRowCells= (i, j)->board.getCellValue(new Move(i, j));
         BiFunction<Integer, Integer, Character> getColCells= (i, j)->board.getCellValue(new Move(j, i));

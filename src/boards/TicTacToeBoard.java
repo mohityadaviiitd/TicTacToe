@@ -7,6 +7,7 @@ import gamePlay.Player;
 
 public class TicTacToeBoard implements Board {
 
+
     char[][] ticTacToeBoard= new char[3][3];
     public TicTacToeBoard() {
         for(int i=0; i<3; ++i) {
@@ -24,12 +25,10 @@ public class TicTacToeBoard implements Board {
         this.ticTacToeBoard = ticTacToeBoard;
     }
 
-    @Override
     public char getCellValue(Move move) {
         return ticTacToeBoard[move.getRow()][move.getCol()];
     }
 
-    @Override
     public void setCellValue(Player player, Move move) {
         ticTacToeBoard[move.getRow()][move.getCol()]= player.getSymbol();
     }
